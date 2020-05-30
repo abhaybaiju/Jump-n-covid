@@ -29,6 +29,7 @@
 
     //vars for jump human
     var xHum = canvas.height -20;
+    var yHum = canvas.width/2;
     var dxHum = 1;
 
     //event Handler
@@ -65,10 +66,18 @@
     }
     function collision() {
         //TODO detect if human touches virus
+        if((yHum > x-1 && yHum < x+21 && xHum+20> y)||(yHum+20 > x && yHum+20 < x+20 && xHum+20> y)){
+            console.log("Collision at " + x + " " + yHum);
+           clearInterval(timer)
+        }
     }
-
+    var speed = 10;
     function faster() {
         //TODO make game faster with every point
+        clearInterval(timer)
+        speed *=0.9
+        timer = setInterval(draw, speed);
+        console.log(speed)
     }
 
     //set Jump parameters
@@ -96,13 +105,19 @@
                 jumpHeight = jumpHeight-jumpSpeed;
             }
         }
+        //Speed up
+        if (x + dx < 0) {
+            faster()
+        }
+        //Checks Collision
+        collision();
         //print objects
         drawVirus();
         drawHuman();
 
         //checks if spacebar is pressed and goes up and down
         if(spacePressed){
-            jumpHeight=80;
+            jumpHeight=90;
             spacePressed=false;
             goingUp = true;
         }
@@ -114,12 +129,13 @@
 
         //change x value => change pos of Virus
         x -= dx;
+       
     }
 
 
 
     //calls draw ever 10 mil.secs
-    setInterval(draw, 10);
+    timer = setInterval(draw, speed);
 </script>
 </body>
 </html>
