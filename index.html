@@ -31,9 +31,18 @@
     var xHum = canvas.height -20;
     var dxHum = 1;
 
+    //event Handler
+    var spacePressed = false;
+    document.addEventListener("keydown",keyDownHandler,false);
 
-    //draw of static red block
-    function drawHuman() {
+    function keyDownHandler(e){
+        if(e.keyCode === 32){
+            spacePressed=true;
+        }
+    }
+
+     //draw of static red block
+     function drawHuman() {
         ctx.beginPath();
         ctx.rect(canvas.width/2, xHum, 20, 20
         ); //TODO change with pic of human
@@ -51,26 +60,6 @@
         ctx.closePath();
     }
 
-
-    function jump() { // does not work, was just an idea maybe you can use it
-        var i;
-        for (i = 0; i < 4; i++) {
-            setTimeout(function () {
-                xHum -= 0.1; //up
-            }, 10);
-        }
-        var j;
-        for (j = 0; j < 4; j++) {
-           setTimeout(function () {
-               xHum += 0.1; //down
-            }, 10000);
-        }
-
-
-
-
-    }
-
     function score() {
         //TODO count score
     }
@@ -82,29 +71,40 @@
         //TODO make game faster with every point
     }
 
+    //set Jump parameters
+    var jumpHeight = 0;
+    var jumpSpeed = 2;
+    var goingUp = false;
     function draw() {
+        
         //clear all drawings
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+        
+        //jump logic
+        if(jumpHeight<=0){
+            xHum=canvas.height-20;
+        }
+        else{
+            if(goingUp){
+                xHum = xHum - jumpSpeed;
+                if(xHum < canvas.height - 20 - jumpHeight){
+                    goingUp=false;
+                }
+            }
+            else{
+                xHum = canvas.height - 20 - jumpHeight;
+                jumpHeight = jumpHeight-jumpSpeed;
+            }
+        }
         //print objects
         drawVirus();
         drawHuman();
 
         //checks if spacebar is pressed and goes up and down
-        //TODO does not work, dont know why, maybe you can fix it
-        document.body.onkeyup = function(e){
-            if(e.keyCode == 32){
-
-                var i;
-                for (i = 0; i < 4; i++) {
-                 xHum -= 0.5; //up
-                }
-                var j;
-                for (j = 0; j < 4; j++) {
-                     xHum += 0.5;//down
-
-                }
-            }
+        if(spacePressed){
+            jumpHeight=80;
+            spacePressed=false;
+            goingUp = true;
         }
 
         //if virus at left end, then move back to right end
