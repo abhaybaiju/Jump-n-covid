@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Jump'n'Covid/Corona?</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas" width="480" height="320"></canvas>
+
+<script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+
+    //vars for moving virus
+    var x = canvas.width;
+    var y = canvas.height - 30;
+    var dx = 1;
+
+    //vars for jump human
+    var xHum = canvas.height -20;
+    var dxHum = 1;
+
+
+    //draw of static red block
+    function drawHuman() {
+        ctx.beginPath();
+        ctx.rect(canvas.width/2, xHum, 20, 20
+        ); //TODO change with pic of human
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    //draw of moving green block
+    function drawVirus() {
+        ctx.beginPath();
+        ctx.rect(x, y, 20, 50); //TODO change with pic of virus
+        ctx.fillStyle = "green";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+
+    function jump() { // does not work, was just an idea maybe you can use it
+        var i;
+        for (i = 0; i < 4; i++) {
+            setTimeout(function () {
+                xHum -= 0.1; //up
+            }, 10);
+        }
+        var j;
+        for (j = 0; j < 4; j++) {
+           setTimeout(function () {
+               xHum += 0.1; //down
+            }, 10000);
+        }
+
+
+
+
+    }
+
+    function score() {
+        //TODO count score
+    }
+    function collision() {
+        //TODO detect if human touches virus
+    }
+
+    function faster() {
+        //TODO make game faster with every point
+    }
+
+    function draw() {
+        //clear all drawings
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        //print objects
+        drawVirus();
+        drawHuman();
+
+        //checks if spacebar is pressed and goes up and down
+        //TODO does not work, dont know why, maybe you can fix it
+        document.body.onkeyup = function(e){
+            if(e.keyCode == 32){
+
+                var i;
+                for (i = 0; i < 4; i++) {
+                 xHum -= 0.5; //up
+                }
+                var j;
+                for (j = 0; j < 4; j++) {
+                     xHum += 0.5;//down
+
+                }
+            }
+        }
+
+        //if virus at left end, then move back to right end
+        if (x + dx < 0) {
+            x = canvas.width;
+        }
+
+        //change x value => change pos of Virus
+        x -= dx;
+    }
+
+
+
+    //calls draw ever 10 mil.secs
+    setInterval(draw, 10);
+</script>
+</body>
+</html>
